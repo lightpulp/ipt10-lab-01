@@ -7,6 +7,16 @@
 </head>
 <body>
 
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'])) {
+    $email = $_POST['email'];
+    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        echo "<script>alert('Wrong Email Format!');</script>";
+        header("Location: register.php"); exit();
+    }
+}
+?>
+
 <div class="container mt-4">
     <h3>Registration Form</h3>
 
@@ -58,14 +68,25 @@
 
         <div class="mb-2">
             <label>Mobile Number</label>
-            <input type="text" name="mobile" class="form-control">
+            <input type="text" name="mobile" id="mobile" class="form-control" placeholder="+63 000 000 000">
         </div>
+
 
         <input type="reset" class="btn btn-secondary">
         <input type="submit" class="btn btn-primary">
 
     </form>
 </div>
+
+<script> 
+
+document.getElementById("mobile").addEventListener("input", function () {
+    let n = this.value.replace(/\D/g, "").replace(/^63/, "").substring(0, 10);
+    if (n.length === 0) this.value = "+63";
+    else this.value = "+63 " + n.replace(/(\d{3})(\d{3})(\d{4})/, "$1 $2 $3").trim();
+});
+
+</script>
 
 </body>
 </html>
